@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Mar  7 14:11:38 2020
+
+@author: harveyshan
+"""
+
+import pandas as pd
+import datetime
+import pandas_datareader.data as web
+from pandas import Series, DataFrame
+import matplotlib.pyplot as plt
+from matplotlib import style
+import matplotlib as mpl
+
+#import chart 
+
+start = datetime.datetime(2019, 3, 11)
+end = datetime.datetime(2020, 3, 11)
+
+df = web.DataReader("AAPL", 'yahoo', start, end)
+df.tail()
+
+#rolling mean and return rate 
+#rolling mean aka moving avg
+close_px = df['Adj Close']
+mavg = close_px.rolling(window=100).mean() 
+
+
+
+
+# Adjusting the size of matplotlib
+
+mpl.rc('figure', figsize=(8, 7))
+mpl.__version__
+
+# Adjusting the style of matplotlib
+style.use('ggplot')
+
+close_px.plot(label='AAPL')
+mavg.plot(label='mavg')
+plt.legend()
+
+
+#return deviation 
+rets = close_px / close_px.shift(1) - 1
+rets.plot(label='return')
+
+
+
+
+
+
+
