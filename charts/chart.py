@@ -7,7 +7,9 @@ import matplotlib.pyplot as plt
 def chart(ticker,start,end,interval='15m'):
     msft = yf.Ticker(ticker)
     hist = msft.history(start=start,end=end,interval=interval)
-    print(hist.Open.to_numpy())
+    #print(hist.Open.to_numpy())
+    #for i in hist.Open.to_numpy():
+    #    print(i)
 
     plt.plot(hist.Open.to_numpy(),label='Open')
     plt.plot(hist.High.to_numpy(),label='High')
@@ -33,4 +35,4 @@ def chart(ticker,start,end,interval='15m'):
 
 
 def test():
-    chart('GE','2020-3-1','2020-4-4','15m')
+    chart('DIS','2020-2-1','2020-3-4','15m')
