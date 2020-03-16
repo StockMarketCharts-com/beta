@@ -3,19 +3,34 @@ from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 
-msft = yf.Ticker('MSFT')
-hist = msft.history(start='2020-3-1',end='2020-5-3',interval='15m')
-print(hist.Open.to_numpy())
 
-plt.plot(hist.Open.to_numpy())
-plt.plot(hist.High.to_numpy())
-plt.plot(hist.Low.to_numpy())
+def chart(ticker,start,end,interval='15m'):
+    msft = yf.Ticker(ticker)
+    hist = msft.history(start=start,end=end,interval=interval)
+    print(hist.Open.to_numpy())
+
+    plt.plot(hist.Open.to_numpy(),label='Open')
+    plt.plot(hist.High.to_numpy(),label='High')
+    plt.plot(hist.Low.to_numpy(),label='Low')
 
 
-high_low_delta = np.ndarray(len(hist.Open.to_numpy()))
-for i in range(len(hist.Open.to_numpy())):
-    high_low_delta[i] = hist.High.to_numpy()[i] - hist.Low.to_numpy()[i]
+    high_low_delta = np.ndarray(len(hist.Open.to_numpy()))
+    for i in range(len(hist.Open.to_numpy())):
+        high_low_delta[i] = hist.High.to_numpy()[i] - hist.Low.to_numpy()[i]
+        high_low_delta[i] *= 5
 
-plt.bar(range(len(high_low_delta)),high_low_delta)
+    plt.bar(range(len(high_low_delta)),high_low_delta,color='purple',label='Volatility')
 
-plt.show()
+    if interval == '15m':
+        spacing = range(0,len(high_low_delta),26)
+    else:
+        spacing = range(0,len(high_low_delta),13)
+    plt.xticks(spacing,range(len(spacing)))
+    plt.grid(b=True,axis='x')
+    plt.title(ticker + ' (' + start + ')-(' + end + ')')
+    plt.legend()
+    plt.show()
+
+
+def test():
+    chart('GE','2020-3-1','2020-4-4','15m')
